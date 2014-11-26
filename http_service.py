@@ -13,13 +13,13 @@ class MyHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-type", "application/json")
             self.end_headers()
-            seconds = match.group(0).strip("/")
+            seconds = match.group(1)
             self.wfile.write("%s" % get_json(seconds))
         else:
             self.send_response(404)
-            self.send_header("Content-type", "text/html")
+            self.send_header("Content-type", "application/json")
             self.end_headers()
-            self.wfile.write("You must specify seconds on url path")
+            self.wfile.write("{ 'error': 'You must specify seconds on url path' }")
         return
 
 def get_median(data_list):
