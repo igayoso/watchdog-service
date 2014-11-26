@@ -35,6 +35,7 @@ class MyHandler(BaseHTTPRequestHandler):
             median = ''
         json_file.append({'files': files, 'median_lenght': median})
         return(json.dumps(json_file))
+
     def get_median(self, data_list):
         """
         If using python3 I could use median function but in python 2.7 it's
@@ -55,6 +56,7 @@ class MyHandler(BaseHTTPRequestHandler):
           high_index = n / 2
           average = (data_list[low_index] + data_list[high_index]) / 2
           return average
+
     def do_GET(self):
         # Only continue if there is only one path after URL
         regexp = re.compile('^\/(\d+)$')
