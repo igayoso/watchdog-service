@@ -63,7 +63,7 @@ def get_json(seconds):
         # new files creation after request
         if date_before <= check_date_time <= now:
             path = os.path.basename(val)
-            lenght = len(val)
+            lenght = len(path)
             files.append(path)
             filenames_lenght.append(lenght)
     # It's only for return json empty data and not get an error
