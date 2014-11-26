@@ -2,21 +2,21 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import datetime
 import json
 import os
+import re
 
 class MyHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200)
-        # Only continue if there is a path after url but if there is
-        # not path will show message
-        if self.path is not '/':
+        # Only continue if there is only one path after URL
+        regexp = re.compile('^\/(\d+)$')
+        match = regexp.match(self.path)
+        if match:
+            self.send_response(200)
             self.send_header("Content-type", "application/json")
             self.end_headers()
-            seconds = self.path.strip("/")
-            if seconds.isdigit():
-                self.wfile.write("%s" % get_json(seconds))
-            else:
-                self.wfile.write("Path must be a integer (seconds)")
+            seconds = match.group(0).strip("/")
+            self.wfile.write("%s" % get_json(seconds))
         else:
+            self.send_response(404)
             self.send_header("Content-type", "text/html")
             self.end_headers()
             self.wfile.write("You must specify seconds on url path")
