@@ -21,6 +21,6 @@ try:
     # Only watch for create files, ignore rest of operations
     wm.add_watch('/home', pyinotify.IN_CREATE)
     # Daemonize for start with init.d script
-    notifier.loop(daemonize=True, pid_file='/var/run/whatchdog.pid')
+    notifier.loop(daemonize=True, pid_file='/var/run/watchdog.pid')
 except pyinotify.NotifierError, err:
     print >> sys.stderr, err
