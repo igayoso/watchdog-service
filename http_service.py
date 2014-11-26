@@ -84,7 +84,7 @@ class MyHandler(BaseHTTPRequestHandler):
 def write_pidfile():
     pid_file = '/var/run/http_service.pid'
     if os.path.exists(pid_file):
-        logger.info("Cannot daemonize: pid file %s already exists." % pid_file)
+        print("Cannot daemonize: pid file %s already exists." % pid_file)
         raise SystemExit(1)
     pid = str(os.getpid())
     f = open(pid_file, 'w')
