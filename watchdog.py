@@ -10,7 +10,7 @@ class TrackCreation(pyinotify.ProcessEvent):
        regexp = re.compile(r'_.*')
        if regexp.search(filename) is not None:
             # Using better datetime format for help when make operations with datetimes
-            fo.write("%s %s" % (datetime.datetime.now().strftime("%Y%m%d%H%M%S"), filename))
+            fo.write("%s %s\n" % (datetime.datetime.now().strftime("%Y%m%d%H%M%S"), filename))
             fo.flush()
 
 fo = file('/var/log/newfiles.log', 'a')
