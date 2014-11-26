@@ -3,6 +3,9 @@ import datetime
 import json
 import os
 import re
+import sys
+import logging
+from logging import handlers
 
 class MyHandler(BaseHTTPRequestHandler):
     def get_json(self, seconds):
@@ -57,6 +60,10 @@ class MyHandler(BaseHTTPRequestHandler):
           average = (data_list[low_index] + data_list[high_index]) / 2
           return average
 
+    def log_request(self, code='-', size='-'):
+        # Send request info to logger file
+        logger.info('"%s" %s %s', self.requestline, str(code), str(size))
+
     def do_GET(self):
         # Only continue if there is only one path after URL
         regexp = re.compile('^\/(\d+)$')
@@ -77,7 +84,7 @@ class MyHandler(BaseHTTPRequestHandler):
 def write_pidfile():
     pid_file = '/var/run/http_service.pid'
     if os.path.exists(pid_file):
-        print("Cannot daemonize: pid file %s already exists." % pid_file)
+        logger.info("Cannot daemonize: pid file %s already exists." % pid_file)
         raise SystemExit(1)
     pid = str(os.getpid())
     f = open(pid_file, 'w')
@@ -85,11 +92,14 @@ def write_pidfile():
     f.close()
 
 try:
+    logger = logging.getLogger("watchdog")
+    file_log = logging.FileHandler(filename="/var/log/http_service.log")
+    logger.addHandler(file_log)
+    logger.setLevel(logging.INFO)
     write_pidfile()
     server = HTTPServer(('localhost', 8888), MyHandler)
-    # FIX: send this messages to external log
-    print('Started http server')
+    logger.info('Started http server')
     server.serve_forever()
 except KeyboardInterrupt:
-    print('^C received, shutting down server')
+    logger.info('^C received, shutting down server')
     server.socket.close()
